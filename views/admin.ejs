@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Telangana Tourism</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #0b5ed7 0%, #001f4d 100%);
+            color: #fff;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            padding: 12px 20px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .main-content {
+            padding: 2rem;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 24px;
+        }
+        .table > :not(caption) > * > * {
+            padding: 1rem 0.75rem;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <div class="row g-0 flex-nowrap">
+        
+        <!-- Sidebar -->
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar shadow">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-4 text-white min-vh-100 position-fixed" style="width: inherit;">
+                <a href="/admin" class="d-flex align-items-center pb-3 mb-md-4 me-md-auto text-white text-decoration-none border-bottom w-100 border-secondary">
+                    <span class="fs-5 d-none d-sm-inline fw-bold"><i class="bi bi-shield-lock-fill me-2 text-warning"></i>Admin Panel</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
+                    <li class="nav-item w-100">
+                        <a href="/admin" class="nav-link active align-middle">
+                            <i class="bi bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100 mt-2">
+                        <small class="text-uppercase text-muted fw-bold ms-2 d-none d-sm-inline" style="font-size: 11px;">Main Menu</small>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a href="/" class="nav-link align-middle">
+                            <i class="bi bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a href="/add-blog" class="nav-link align-middle">
+                            <i class="bi bi-pencil-square"></i> <span class="ms-1 d-none d-sm-inline">Add Blog</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a href="/blogs" class="nav-link align-middle">
+                            <i class="bi bi-journals"></i> <span class="ms-1 d-none d-sm-inline">View Blogs</span>
+                        </a>
+                    </li>
+                    <li class="nav-item w-100 mt-5 pt-3 border-top border-secondary">
+                        <a href="/logout" class="nav-link text-danger align-middle">
+                            <i class="bi bi-box-arrow-left"></i> <span class="ms-1 d-none d-sm-inline">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col py-3 main-content offset-md-3 offset-xl-2">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-3 shadow-sm mb-4 px-3 py-2">
+                <div class="container-fluid">
+                    <span class="navbar-brand fw-bold text-dark"><i class="bi bi-list me-2 d-sm-none text-primary"></i>Dashboard Overview</span>
+                    <div class="d-flex align-items-center ms-auto">
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://ui-avatars.com/api/?name=Admin&background=0b5ed7&color=fff" alt="admin" width="35" height="35" class="rounded-circle me-2">
+                                <span class="d-none d-sm-inline fw-bold">Admin</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser1">
+                                <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left me-2 text-danger"></i>Sign out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <%
+                // Calculate unique districts
+                let uniqueDistricts = new Set();
+                blogs.forEach(blog => {
+                    if(blog.district) uniqueDistricts.add(blog.district);
+                });
+            %>
+
+            <!-- Dashboard Statistics -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm border-start border-primary border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted fw-bold mb-1">Total Users</h6>
+                                    <h2 class="fw-bold mb-0 text-dark"><%= users.length %></h2>
+                                </div>
+                                <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm border-start border-success border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted fw-bold mb-1">Total Blogs</h6>
+                                    <h2 class="fw-bold mb-0 text-dark"><%= blogs.length %></h2>
+                                </div>
+                                <div class="stat-icon bg-success bg-opacity-10 text-success">
+                                    <i class="bi bi-journals"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm border-start border-danger border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted fw-bold mb-1">Total Likes</h6>
+                                    <h2 class="fw-bold mb-0 text-dark"><%= totalLikes %></h2>
+                                </div>
+                                <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+                                    <i class="bi bi-heart-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm border-start border-info border-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted fw-bold mb-1">Total Comments</h6>
+                                    <h2 class="fw-bold mb-0 text-dark"><%= totalComments %></h2>
+                                </div>
+                                <div class="stat-icon bg-info bg-opacity-10 text-info">
+                                    <i class="bi bi-chat-left-text-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Registered Users Table -->
+                <div class="col-xl-5">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom-0">
+                            <h5 class="mb-0 fw-bold"><i class="bi bi-people me-2 text-primary"></i>Registered Users</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light text-muted">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% users.forEach(function(user) { %>
+                                            <tr>
+                                                <td class="fw-bold text-secondary">#<%= user.id %></td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-primary rounded-circle text-white d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px; font-size: 12px; font-weight: bold;">
+                                                            <%= user.name ? user.name.charAt(0).toUpperCase() : 'U' %>
+                                                        </div>
+                                                        <span class="fw-semibold"><%= user.name %></span>
+                                                    </div>
+                                                </td>
+                                                <td class="text-muted"><%= user.email %></td>
+                                                <td class="text-end text-nowrap">
+                                                    <a href="/admin/edit-user/<%= user.id %>" class="btn btn-sm btn-outline-primary me-1" title="Edit User"><i class="bi bi-pencil-square"></i></a>
+                                                    <form action="/admin/delete-user/<%= user.id %>" method="POST" class="d-inline">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Delete User" onclick="confirmDelete(this);"><i class="bi bi-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tourism Blogs Table with Thumbnails -->
+                <div class="col-xl-7">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom-0">
+                            <h5 class="mb-0 fw-bold"><i class="bi bi-journal-text me-2 text-success"></i>Tourism Blogs</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light text-muted">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Place & District</th>
+                                            <th>Short Description</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% blogs.forEach(function(blog) { %>
+                                            <tr>
+                                                <td class="fw-bold text-secondary">#<%= blog.id %></td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <% if (blog.image_url) { %>
+                                                            <img src="<%= blog.image_url %>" class="rounded me-2 border shadow-xs" alt="<%= blog.title %>" style="width: 50px; height: 35px; object-fit: cover;">
+                                                        <% } else { %>
+                                                            <img src="/images/hero_bg.png" data-title="<%= blog.title %>" class="rounded me-2 border shadow-xs wiki-img" alt="<%= blog.title %>" style="width: 50px; height: 35px; object-fit: cover;">
+                                                        <% } %>
+                                                        <div>
+                                                            <div class="fw-semibold text-dark mb-1 small"><%= blog.title %></div>
+                                                            <span class="badge bg-warning text-dark me-1" style="font-size: 9px;"><i class="bi bi-geo-alt-fill me-1"></i><%= blog.district %></span>
+                                                            <span class="badge bg-info text-dark" style="font-size: 9px;"><i class="bi bi-tag-fill me-1"></i><%= blog.category %></span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-muted small" style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                    <%= blog.description %>
+                                                </td>
+                                                <td class="text-end text-nowrap">
+                                                    <a href="/admin/edit-blog/<%= blog.id %>" class="btn btn-sm btn-outline-primary me-1" title="Edit Blog"><i class="bi bi-pencil-square"></i></a>
+                                                    <form action="/admin/delete-blog/<%= blog.id %>" method="POST" class="d-inline">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Delete Blog" onclick="confirmDelete(this);"><i class="bi bi-trash"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Moderation Row -->
+            <div class="row g-4 mt-4">
+                <div class="col-12">
+                    <div class="card shadow-sm mb-5">
+                        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom-0">
+                            <h5 class="mb-0 fw-bold text-danger"><i class="bi bi-chat-left-text-fill me-2"></i>User Comments Moderation</h5>
+                            <span class="badge bg-danger px-3 py-2 rounded-pill"><%= comments.length %> Comments</span>
+                        </div>
+                        <div class="card-body p-0">
+                            <% if (comments && comments.length > 0) { %>
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="table-light text-muted">
+                                            <tr>
+                                                <th style="width: 80px;">ID</th>
+                                                <th>Comment Author</th>
+                                                <th>Blog Post</th>
+                                                <th>Comment Content</th>
+                                                <th>Posted Date</th>
+                                                <th class="text-end">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% comments.forEach(function(comment) { %>
+                                                <tr>
+                                                    <td class="fw-bold text-secondary">#<%= comment.id %></td>
+                                                    <td>
+                                                        <span class="fw-semibold text-dark"><%= comment.username %></span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-truncate d-inline-block fw-medium" style="max-width: 180px;" title="<%= comment.blog_title %>"><%= comment.blog_title %></span>
+                                                    </td>
+                                                    <td class="text-secondary small">
+                                                        <%= comment.comment_text %>
+                                                    </td>
+                                                    <td class="text-muted small">
+                                                        <%= new Date(comment.created_at).toLocaleDateString('en-IN', { hour: '2-digit', minute: '2-digit' }) %>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <form action="/admin/delete-comment/<%= comment.id %>" method="POST" class="d-inline">
+                                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" title="Delete Comment" onclick="confirmDelete(this);"><i class="bi bi-trash-fill me-1"></i>Delete</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <% } else { %>
+                                <div class="text-center py-5">
+                                    <i class="bi bi-chat-square-dots display-3 text-muted opacity-50 mb-3 d-block"></i>
+                                    <h6 class="text-muted">No comments posted yet across the tourism platform.</h6>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(button) {
+    if (button.classList.contains('btn-outline-danger')) {
+        // Change button to active/confirm state with premium feedback
+        button.classList.remove('btn-outline-danger');
+        button.classList.add('btn-danger');
+        button.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Confirm';
+        button.title = 'Click again to confirm deletion';
+        
+        // Reset button after 3 seconds if not clicked again
+        setTimeout(() => {
+            if (button && button.classList.contains('btn-danger')) {
+                button.classList.remove('btn-danger');
+                button.classList.add('btn-outline-danger');
+                button.innerHTML = '<i class="bi bi-trash"></i>';
+                button.title = 'Delete';
+            }
+        }, 3000);
+    } else {
+        // Submit the parent form on second click
+        button.closest('form').submit();
+    }
+}
+
+// Dynamic image fallback fetching for admin table
+document.addEventListener('DOMContentLoaded', function() {
+    const wikiImages = document.querySelectorAll('.wiki-img');
+    wikiImages.forEach(img => {
+        const title = img.getAttribute('data-title');
+        const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=100&origin=*`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const pages = data.query.pages;
+                const pageId = Object.keys(pages)[0];
+                if (pageId !== '-1' && pages[pageId].thumbnail) {
+                    img.src = pages[pageId].thumbnail.source;
+                }
+            })
+            .catch(err => console.error('Error fetching Wikipedia image for', title, err));
+    });
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

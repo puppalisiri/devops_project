@@ -1,0 +1,81 @@
+<%- include('partials/header', { title: 'Register - Telangana Tourism' }) %>
+
+<div class="container">
+    <div class="form-card">
+        <h2 class="text-center mb-4 fw-bold">Register</h2>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="alert alert-success" role="alert"><%= success %></div>
+        <% } %>
+        <form action="/register" method="POST" id="registerForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+            </div>
+            <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" id="showPassword">
+                <label class="form-check-label" for="showPassword">
+                    Show Password
+                </label>
+            </div>
+            <div id="passwordHelp" class="form-text mb-3 text-danger fw-bold" style="display: none;">
+                <i class="bi bi-exclamation-triangle-fill"></i> Weak password. It must be at least 6 characters.
+            </div>
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Register</button>
+            </div>
+        </form>
+        <p class="text-center mt-3 mb-0">Already have an account? <a href="/login" class="text-decoration-none">Login here</a></p>
+    </div>
+</div>
+
+<script>
+    const passwordInput = document.getElementById('password');
+    const showPasswordCheck = document.getElementById('showPassword');
+    const passwordHelp = document.getElementById('passwordHelp');
+    const registerForm = document.getElementById('registerForm');
+
+    // Show/Hide password toggle
+    showPasswordCheck.addEventListener('change', function() {
+        if (this.checked) {
+            passwordInput.type = 'text';
+        } else {
+            passwordInput.type = 'password';
+        }
+    });
+
+    // Real-time password strength validation
+    passwordInput.addEventListener('input', function() {
+        if (this.value.length > 0 && this.value.length < 6) {
+            passwordHelp.style.display = 'block';
+            passwordInput.classList.add('is-invalid');
+        } else {
+            passwordHelp.style.display = 'none';
+            passwordInput.classList.remove('is-invalid');
+        }
+    });
+
+    // Prevent submission if password is too short
+    registerForm.addEventListener('submit', function(e) {
+        if (passwordInput.value.length < 6) {
+            e.preventDefault();
+            passwordHelp.style.display = 'block';
+            passwordInput.classList.add('is-invalid');
+        }
+    });
+</script>
+
+<!-- Add Bootstrap Icons for the alert icon -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<%- include('partials/footer') %>

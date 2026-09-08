@@ -1,0 +1,121 @@
+<%- include('partials/header', { title: 'Edit Blog - Telangana Tourism' }) %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-lg overflow-hidden">
+                <!-- Premium Header -->
+                <div class="bg-primary text-white text-center py-4" style="background: linear-gradient(135deg, #0b5ed7 0%, #003399 100%);">
+                    <h3 class="fw-bold mb-0"><i class="bi bi-pencil-square me-2"></i>Edit My Tourism Blog</h3>
+                    <p class="mb-0 mt-2 text-light opacity-75">Update details or change the image for your post</p>
+                </div>
+                
+                <div class="card-body p-5 bg-white">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger shadow-sm" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> <%= error %>
+                        </div>
+                    <% } %>
+                    <% if (typeof success !== 'undefined' && success) { %>
+                        <div class="alert alert-success shadow-sm" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i> <%= success %>
+                        </div>
+                    <% } %>
+                    
+                    <form action="/profile/edit-blog/<%= blog.id %>" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <!-- Title Field (Floating Label) -->
+                            <div class="col-md-12 mb-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control bg-light" id="title" name="title" placeholder="Blog Title" value="<%= blog.title %>" required>
+                                    <label for="title">Blog Title <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- District Field (Dropdown) -->
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <select class="form-select bg-light" id="district" name="district" required>
+                                        <option value="" disabled>Select District</option>
+                                        <% const districts = ['Hyderabad', 'Warangal', 'Nizamabad', 'Karimnagar', 'Khammam', 'Mahabubnagar', 'Nalgonda', 'Adilabad', 'Medak', 'Rangareddy', 'Bhadrachalam', 'Mulugu', 'Other']; %>
+                                        <% districts.forEach(dist => { %>
+                                            <option value="<%= dist %>" <%= blog.district === dist ? 'selected' : '' %>><%= dist %></option>
+                                        <% }) %>
+                                    </select>
+                                    <label for="district">District <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+
+                            <!-- Category Field (Dropdown) -->
+                            <div class="col-md-6 mb-4">
+                                <div class="form-floating">
+                                    <select class="form-select bg-light" id="category" name="category" required>
+                                        <option value="" disabled>Select Category</option>
+                                        <% const categories = ['Historical Places', 'Temples', 'Waterfalls', 'Wildlife', 'Adventure', 'Cultural Heritage', 'Nature Tourism']; %>
+                                        <% categories.forEach(cat => { %>
+                                            <option value="<%= cat %>" <%= blog.category === cat ? 'selected' : '' %>><%= cat %></option>
+                                        <% }) %>
+                                    </select>
+                                    <label for="category">Category <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Upload Field (Optional for Edit) -->
+                        <div class="mb-4">
+                            <label for="image" class="form-label fw-bold text-secondary">Change Tourist Place Image <span class="text-muted">(Optional)</span></label>
+                            <input class="form-control bg-light py-2" type="file" id="image" name="image" accept="image/*">
+                            <% if (blog.image_url) { %>
+                                <div class="form-text mt-2 text-primary"><i class="bi bi-image me-1"></i> Current Image: <a href="<%= blog.image_url %>" target="_blank" class="fw-bold text-decoration-none"><%= blog.image_url %></a></div>
+                            <% } else { %>
+                                <div class="form-text mt-2 text-secondary"><i class="bi bi-wikipedia me-1"></i> Currently using dynamic Wikipedia fallback image.</div>
+                            <% } %>
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="form-floating mb-2">
+                            <textarea class="form-control bg-light" id="description" name="description" placeholder="Share your experience..." style="height: 220px; resize: none;" required><%= blog.description %></textarea>
+                            <label for="description">Blog Description <span class="text-danger">*</span></label>
+                        </div>
+                        
+                        <!-- Character Counter -->
+                        <div class="d-flex justify-content-between mb-5">
+                            <small class="text-muted"><i class="bi bi-info-circle me-1"></i> Share specific highlights, tips, and guidelines for visiting.</small>
+                            <small class="fw-bold text-primary" id="charCount"><%= blog.description.length %> characters</small>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+                            <a href="/profile" class="btn btn-light btn-lg px-4 me-md-2 border shadow-sm">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow"><i class="bi bi-save-fill me-2"></i> Update Blog</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const descInput = document.getElementById('description');
+    const charCount = document.getElementById('charCount');
+
+    descInput.addEventListener('input', function() {
+        const len = this.value.length;
+        charCount.textContent = len + ' characters';
+        
+        if (len > 1000) {
+            charCount.classList.remove('text-primary');
+            charCount.classList.add('text-danger');
+        } else {
+            charCount.classList.add('text-primary');
+            charCount.classList.remove('text-danger');
+        }
+    });
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<%- include('partials/footer') %>

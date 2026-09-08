@@ -1,0 +1,151 @@
+<%- include('partials/header', { title: 'My Profile - Telangana Tourism' }) %>
+
+<div class="container my-5">
+    <div class="row g-4">
+        
+        <!-- Left Column: User Profile Info Card -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white text-center p-4">
+                <div class="mt-3">
+                    <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(user.name) %>&background=0b5ed7&color=fff&size=128" alt="<%= user.name %>" class="rounded-circle shadow-sm" style="width: 110px; height: 110px;">
+                </div>
+                <h3 class="fw-bold mt-3 text-dark"><%= user.name %></h3>
+                <p class="text-muted mb-4"><i class="bi bi-envelope-fill me-1 text-primary"></i><%= user.email %></p>
+                <hr class="opacity-25">
+                
+                <!-- Quick User Stats -->
+                <div class="row my-3 g-2">
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h4 class="fw-bold mb-0 text-primary"><%= blogs.length %></h4>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 10px;">Blogs Posted</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <h4 class="fw-bold mb-0 text-danger"><%= totalLikes %></h4>
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 10px;">Likes Received</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid mt-4">
+                    <a href="/add-blog" class="btn btn-primary rounded-pill py-2 fw-bold shadow-sm"><i class="bi bi-pencil-square me-2"></i> Write a New Blog</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: User's Uploaded Blogs Table -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                    <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-journals text-primary me-2"></i>My Shared Experiences</h4>
+                    <span class="badge bg-primary px-3 py-2 rounded-pill"><%= blogs.length %> Posts</span>
+                </div>
+                
+                <% if (blogs && blogs.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-muted">
+                                <tr>
+                                    <th>Place Image</th>
+                                    <th>Title & District</th>
+                                    <th>Category</th>
+                                    <th class="text-center">Likes</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% blogs.forEach(function(blog) { %>
+                                    <tr>
+                                        <td>
+                                            <!-- Thumbnail image with fallbacks -->
+                                            <% if (blog.image_url) { %>
+                                                <img src="<%= blog.image_url %>" class="rounded border shadow-xs" alt="<%= blog.title %>" style="width: 70px; height: 50px; object-fit: cover;">
+                                            <% } else { %>
+                                                <img src="/images/hero_bg.png" data-title="<%= blog.title %>" class="rounded border shadow-xs wiki-img" alt="<%= blog.title %>" style="width: 70px; height: 50px; object-fit: cover;">
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold text-dark mb-1"><%= blog.title %></div>
+                                            <small class="text-muted"><i class="bi bi-geo-alt-fill me-1 text-warning"></i><%= blog.district %></small>
+                                        </td>
+                                        <td>
+                                            <span class="badge <%= getCategoryColor(blog.category) %>"><%= blog.category %></span>
+                                        </td>
+                                        <td class="text-center fw-bold text-secondary">
+                                            <i class="bi bi-heart-fill text-danger me-1"></i> <%= blog.likes_count %>
+                                        </td>
+                                        <td class="text-end text-nowrap">
+                                            <a href="/profile/edit-blog/<%= blog.id %>" class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1" title="Edit Post"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+                                            <form action="/profile/delete-blog/<%= blog.id %>" method="POST" class="d-inline">
+                                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="confirmDelete(this);" title="Delete Post"><i class="bi bi-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-5">
+                        <i class="bi bi-journal-x display-1 text-muted opacity-50 mb-3 d-block"></i>
+                        <h5 class="fw-bold text-secondary">You haven't written any blogs yet</h5>
+                        <p class="text-muted small mb-4">Start sharing your journeys across beautiful places in Telangana!</p>
+                        <a href="/add-blog" class="btn btn-primary rounded-pill px-4 shadow-sm"><i class="bi bi-pencil-square me-2"></i> Create Your First Blog</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function confirmDelete(button) {
+    if (button.classList.contains('btn-outline-danger')) {
+        // Change button style to premium delete confirmation feedback
+        button.classList.remove('btn-outline-danger');
+        button.classList.add('btn-danger');
+        button.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Confirm';
+        button.title = 'Click again to permanently delete';
+        
+        // Reset after 3 seconds if not clicked again
+        setTimeout(() => {
+            if (button && button.classList.contains('btn-danger')) {
+                button.classList.remove('btn-danger');
+                button.classList.add('btn-outline-danger');
+                button.innerHTML = '<i class="bi bi-trash"></i>';
+                button.title = 'Delete';
+            }
+        }, 3000);
+    } else {
+        // Submit the deletion form on confirm click
+        button.closest('form').submit();
+    }
+}
+
+// Dynamic image fallback fetching for profile table
+document.addEventListener('DOMContentLoaded', function() {
+    const wikiImages = document.querySelectorAll('.wiki-img');
+    wikiImages.forEach(img => {
+        const title = img.getAttribute('data-title');
+        const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=100&origin=*`;
+        
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const pages = data.query.pages;
+                const pageId = Object.keys(pages)[0];
+                if (pageId !== '-1' && pages[pageId].thumbnail) {
+                    img.src = pages[pageId].thumbnail.source;
+                }
+            })
+            .catch(err => console.error('Error fetching Wikipedia image for', title, err));
+    });
+});
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<%- include('partials/footer') %>
