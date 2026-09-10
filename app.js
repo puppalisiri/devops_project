@@ -86,7 +86,7 @@ const getCategoryColor = (cat) => {
         case 'Historical Places': return 'bg-secondary text-white';
         case 'Temples': return 'bg-danger text-white';
         case 'Waterfalls': return 'bg-primary text-white';
-        case 'Wildlife': return 'bg-success text-white';
+        case 'Wildlife': return 'bg-success text-blue';
         case 'Adventure': return 'bg-dark text-white';
         case 'Cultural Heritage': return 'bg-warning text-dark';
         case 'Nature Tourism': return 'bg-info text-dark';
