@@ -1,135 +1,41 @@
-<%- include('partials/header', { title: 'Home - Telangana Tourism' }) %>
-
-<section class="hero-section">
-    <div class="container">
-        <h1 class="hero-title">Explore Telangana</h1>
-        <p class="hero-subtitle">Discover the rich heritage, vibrant culture, and breathtaking landscapes.</p>
-        <a href="/blogs" class="btn btn-primary btn-lg px-4 py-2 fw-bold">Explore Blogs</a>
-    </div>
-</section>
-
 <section class="container my-5">
-    <h2 class="text-center mb-4 fw-bold">Famous Tourist Places</h2>
+    <h2 class="text-center mb-4 fw-bold">Featured Destinations</h2>
+
     <div class="row g-4">
-        <!-- Card 1 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card tourism-card">
-                <img src="/images/charminar.png" class="card-img-top" alt="Charminar">
+        <div class="col-md-4">
+            <div class="card tourism-card h-100">
+                <img src="/images/charminar.png" class="card-img-top" alt="Hyderabad">
                 <div class="card-body">
-                    <h5 class="card-title fw-bold">Charminar</h5>
-                    <p class="card-text text-muted">The iconic 16th-century mosque with four grand arches, a symbol of Hyderabad.</p>
+                    <h5 class="card-title fw-bold">Hyderabad</h5>
+                    <p class="card-text text-muted">
+                        Experience the city of pearls, delicious biryani, and historic monuments.
+                    </p>
                 </div>
             </div>
         </div>
-        <!-- Card 2 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card tourism-card">
-                <img src="/images/golconda.png" class="card-img-top" alt="Golconda Fort">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">Golconda Fort</h5>
-                    <p class="card-text text-muted">A magnificent citadel known for its acoustics, palaces, and ancient history.</p>
-                </div>
-            </div>
-        </div>
-        <!-- Card 3 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card tourism-card">
+
+        <div class="col-md-4">
+            <div class="card tourism-card h-100">
                 <img src="/images/ramoji.png" class="card-img-top" alt="Ramoji Film City">
                 <div class="card-body">
                     <h5 class="card-title fw-bold">Ramoji Film City</h5>
-                    <p class="card-text text-muted">One of the largest film studio complexes in the world, full of entertainment.</p>
+                    <p class="card-text text-muted">
+                        Explore the world's largest integrated film studio complex and entertainment destination.
+                    </p>
                 </div>
             </div>
         </div>
-        <!-- Card 4 -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card tourism-card">
-                <img src="/images/warangal.png" class="card-img-top" alt="Warangal Fort">
+
+        <div class="col-md-4">
+            <div class="card tourism-card h-100">
+                <img src="/images/warangal.png" class="card-img-top" alt="Warangal">
                 <div class="card-body">
-                    <h5 class="card-title fw-bold">Warangal Fort</h5>
-                    <p class="card-text text-muted">Explore the architectural brilliance of the Kakatiya dynasty and the Kala Thoranam.</p>
+                    <h5 class="card-title fw-bold">Warangal</h5>
+                    <p class="card-text text-muted">
+                        Discover ancient temples, forts, and the rich heritage of the Kakatiya dynasty.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<section class="container my-5 pb-5">
-    <hr class="my-5 opacity-25">
-    <h2 class="text-center mb-2 fw-bold">Recent Travel Stories</h2>
-    <p class="text-center text-muted mb-5">Discover the latest tourist places and experiences shared by fellow travelers.</p>
-    <% if (typeof recentBlogs !== 'undefined' && recentBlogs && recentBlogs.length > 0) { %>
-        <div class="row g-4">
-            <% recentBlogs.forEach(function(blog) { %>
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm border-0 tourism-card overflow-hidden">
-                        <div class="position-relative">
-                            <!-- Image -->
-                            <% if (blog.image_url) { %>
-                                <img src="<%= blog.image_url %>" class="card-img-top" alt="<%= blog.title %>" style="height: 240px; object-fit: cover;">
-                            <% } else { %>
-                                <img src="/images/hero_bg.png" data-title="<%= blog.title %>" class="card-img-top wiki-img" alt="<%= blog.title %>" style="height: 240px; object-fit: cover;">
-                            <% } %>
-                            
-                            <!-- District Badge -->
-                            <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-3 py-2 px-3 shadow">
-                                <i class="bi bi-geo-alt-fill me-1"></i> <%= blog.district %>
-                            </span>
-                            
-                            <!-- Category Badge -->
-                            <span class="badge <%= getCategoryColor(blog.category) %> position-absolute top-0 start-0 m-3 py-2 px-3 shadow">
-                                <i class="bi bi-tag-fill me-1"></i> <%= blog.category %>
-                            </span>
-                        </div>
-                        <div class="card-body d-flex flex-column p-4 bg-white">
-                            <h4 class="card-title fw-bold text-dark mb-1"><%= blog.title %></h4>
-                            <p class="text-muted small mb-3"><i class="bi bi-person-circle me-1"></i> By <%= blog.author || 'Anonymous' %></p>
-                            <p class="card-text text-muted flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                                <%= blog.description %>
-                            </p>
-                            <div class="mt-4 border-top pt-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small"><i class="bi bi-heart-fill text-danger me-1"></i> <%= blog.likes_count || 0 %> likes</span>
-                                <a href="/blogs" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold">
-                                    Read Story <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <% }); %>
-        </div>
-    <% } else { %>
-        <div class="text-center py-5 bg-white rounded-4 border shadow-sm">
-            <i class="bi bi-journal-x display-3 text-muted opacity-50 mb-3 d-block"></i>
-            <h5 class="text-muted">No travel stories shared recently</h5>
-            <p class="text-muted small">Check back later or share your own experience first!</p>
-            <a href="/add-blog" class="btn btn-primary btn-sm px-4 mt-2 rounded-pill"><i class="bi bi-pencil-square me-1"></i> Write a Blog</a>
-        </div>
-    <% } %>
-</section>
-
-<!-- Dynamic Image Fetching Script for Fallback Wikipedia Images on Homepage -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const wikiImages = document.querySelectorAll('.wiki-img');
-        wikiImages.forEach(img => {
-            const title = img.getAttribute('data-title');
-            const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=800&origin=*`;
-            
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const pages = data.query.pages;
-                    const pageId = Object.keys(pages)[0];
-                    if (pageId !== '-1' && pages[pageId].thumbnail) {
-                        img.src = pages[pageId].thumbnail.source;
-                    }
-                })
-                .catch(err => console.error('Error fetching Wikipedia image for', title, err));
-        });
-    });
-</script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-<%- include('partials/footer') %>
