@@ -82,3 +82,33 @@ main {
     padding: 2rem 0;
     margin-top: auto;
 }
+
+/* Person 1 Changes */
+
+.btn-primary {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+.tourism-card {
+    border: 2px solid #e9ecef;
+}
+
+.tourism-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.hero-title {
+    letter-spacing: 2px;
+}
+
+.footer {
+    text-align: center;
+}
