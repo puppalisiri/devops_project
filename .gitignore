@@ -1,3 +1,24 @@
-node_modules/ 
-.env 
-*.log 
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Node.js
+node_modules/
+
+# Java compiled files
+*.class
+selenium-java/out/
+
+# Selenium source JARs
+*-sources.jar
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Local database backup (do not publish unverified user data)
+telangana_tourism_backup.sql
